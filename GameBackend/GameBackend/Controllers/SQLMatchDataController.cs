@@ -5,82 +5,76 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using GameBackend.Database;
 
 namespace GameBackend.Controllers
 {
     public class SQLMatchDataController : ApiController
     {
-        IList<PlayerData> products = new List<MatchData>
-            {
-                new PlayerData
-                {
-                },
-                new PlayerData
-                {
-                },
-                new PlayerData
-                {
-                },
-                new PlayerData
-                {
-                }
-
-            };
-
-
-        public IEnumerable<PlayerData> GetSQLMatchData()
-        { 
-            return products;
-        }
-
-        public IHttpActionResult PostNewSQLMatchData(MatchData product)
+        public IHttpActionResult Get(int playerid)
         {
-            this.products.Add(product);
-            Console.WriteLine(products);
-              
-            return Ok(products);
-        }
-
-        public IHttpActionResult GetSQLMatchDataById(int idproduct)
-        {
-            foreach (var product in products)
+            GetSQLMatchByID getSQLMatchByID = new GetSQLMatchByID();
+            try
             {
-                if (product.idproduct == idproduct)
-                {
-                    return Ok(product);
-                }
+                getSQLMatchByID.matchData.idplayerdata = playerid;
+                getSQLMatchByID.execute();
             }
-
-            return NotFound();
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+            return Ok(getSQLMatchByID.matchDatas);
         }
 
-        public IHttpActionResult DeleteSQLMatchData(int idproduct)
+        public IHttpActionResult Get(string date1, string date2)
         {
-            foreach (var product in products)
+            GetSQLMatchByDates getSQLMatchByDates = new GetSQLMatchByDates();
+            try
             {
-                if (product.idproduct == idproduct)
-                {
-                    products.Remove(product);
-                    return Ok(products);
-                }
-            }
+                getSQLMatchByDates.start_date = date1;
+                getSQLMatchByDates.end_date = date2;
 
-            return NotFound();
+                getSQLMatchByDates.execute();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+            return Ok(getSQLMatchByDates.matchDatas);
         }
 
-        public IHttpActionResult PutSQLMatchData(MatchData _product)
+        public IHttpActionResult Delete(int playerid)
         {
-            foreach (var product in products)
+            DeleteSQLMatch deleteSQLMatch = new DeleteSQLMatch();
+            try
             {
-                if (product.idproduct == _product.idproduct)
-                {
-                    products.Remove(product);
-                    products.Add(_product);
-                    return Ok(products);
-                }
+                deleteSQLMatch.matchData.idplayerdata = playerid;
+                deleteSQLMatch.execute();
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+            return Ok();
+        }
 
-            return NotFound();
+        public IHttpActionResult Put(MatchData match)
+        {
+            AddSQLMatch addSQLMatch = new AddSQLMatch();
+            try
+            {
+                addSQLMatch.matchData = match;
+                addSQLMatch.execute();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+            return Ok(addSQLMatch.matchData);
         }
     }
 }

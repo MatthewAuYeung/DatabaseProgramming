@@ -5,72 +5,74 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using GameBackend.Database;
 
 namespace GameBackend.Controllers
 {
     public class SQLPlayerDataController : ApiController
     {
-        IList<PlayerData> products = new List<PlayerData>
-            {
-                new PlayerData
-                {
-                },
-            };
-
-
-        public IEnumerable<PlayerData> GetSQLPlayerData()
-        { 
-            return products;
-        }
-
-        public IHttpActionResult PostNewSQLPlayerData(PlayerData product)
+        public IHttpActionResult Get(string username)
         {
-            this.products.Add(product);
-            Console.WriteLine(products);
-              
-            return Ok(products);
-        }
-
-        public IHttpActionResult GetSQLPlayerDataById(int idproduct)
-        {
-            foreach (var product in products)
+            GetSQLPlayer getSQLPlayer = new GetSQLPlayer();
+            try
             {
-                if (product.idproduct == idproduct)
-                {
-                    return Ok(product);
-                }
+                getSQLPlayer.playerData.username = username;
+                getSQLPlayer.execute();
             }
-
-            return NotFound();
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+            return Ok(getSQLPlayer.playerData);
         }
 
-        public IHttpActionResult DeleteSQLPlayerData(int idproduct)
+        public IHttpActionResult Post(string username)
         {
-            foreach (var product in products)
+            UpdateSQLPlayer updateSQLPlayer = new UpdateSQLPlayer();
+            try
             {
-                if (product.idproduct == idproduct)
-                {
-                    products.Remove(product);
-                    return Ok(products);
-                }
+                updateSQLPlayer.playerData.username = username;
+                updateSQLPlayer.execute();
             }
-
-            return NotFound();
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+            return Ok(updateSQLPlayer.playerData);
         }
 
-        public IHttpActionResult PutSQLPlayerData(PlayerData _product)
+        public IHttpActionResult Delete(string username)
         {
-            foreach (var product in products)
+            DeleteSQLPlayer deleteSQLPlayer = new DeleteSQLPlayer();
+            try
             {
-                if (product.idproduct == _product.idproduct)
-                {
-                    products.Remove(product);
-                    products.Add(_product);
-                    return Ok(products);
-                }
+                deleteSQLPlayer.playerData.username = username;
+                deleteSQLPlayer.execute();                
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+            return Ok(deleteSQLPlayer.playerData);
+        }
 
-            return NotFound();
+        public IHttpActionResult Put(PlayerData player)
+        {
+            AddSQLPlayer addSQLPlayer = new AddSQLPlayer();
+            try
+            {
+                addSQLPlayer.playerData = player;
+                addSQLPlayer.execute();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+            return Ok(addSQLPlayer.playerData);
         }
     }
 }

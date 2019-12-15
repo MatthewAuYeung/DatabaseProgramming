@@ -12,6 +12,10 @@ namespace GameBackend.Database
         // Members
         public PlayerData playerData;
         public MatchData matchData;
+        public IList<MatchData> matchDatas;
+        public string start_date;
+        public string end_date;
+
         protected MySqlConnection conn;
 
         // Functions

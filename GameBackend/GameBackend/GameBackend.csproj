@@ -177,9 +177,15 @@
     <Compile Include="Controllers\SQLMatchDataController.cs" />
     <Compile Include="Controllers\SQLPlayerDataController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="Database\AddSQLPlayerData.cs" />
+    <Compile Include="Database\AddSQLMatch.cs" />
+    <Compile Include="Database\AddSQLPlayer.cs" />
+    <Compile Include="Database\DeleteSQLMatch.cs" />
+    <Compile Include="Database\DeleteSQLPlayer.cs" />
+    <Compile Include="Database\GetSQLMatchByDates.cs" />
+    <Compile Include="Database\GetSQLMatchByID.cs" />
     <Compile Include="Database\GetSQLPlayer.cs" />
     <Compile Include="Database\SQLWrapper.cs" />
+    <Compile Include="Database\UpdateSQLPlayer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
