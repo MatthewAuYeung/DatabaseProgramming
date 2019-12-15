@@ -6,81 +6,101 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 
+using MongoDB.Bson;
+using MongoDB.Driver;
+
 namespace GameBackend.Controllers
 {
     public class NoSQLMatchDataController : ApiController
     {
-        IList<PlayerData> products = new List<PlayerData>
+        public IHttpActionResult GetNoSQLMatchData(int playerid)
+        {
+            try
             {
-                new PlayerData
-                {
-                },
-                new PlayerData
-                {
-                },
-                new PlayerData
-                {
-                },
-                new PlayerData
-                {
-                }
+                var connectionString = "mongodb://localhost";
+                var client = new MongoClient(connectionString);
+                var database = client.GetDatabase("matchdata");
+                var collection = database.GetCollection<BsonDocument>("matchdatas");
 
-            };
-
-
-        public IEnumerable<PlayerData> GetNoSQLMatchData()
-        { 
-            return products;
+                var filterBuilder = Builders<BsonDocument>.Filter;
+                var filter = filterBuilder.Eq("idplayerdata", playerid);
+                var cursor = collection.Find(filter).Limit(10).ToCursor().ToEnumerable();
+                return Ok(cursor);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
         }
 
-        public IHttpActionResult PostNewNoSQLMatchData(MatchData product)
+        public IHttpActionResult GetNoSQLMatchData(string date1, string date2)
         {
-            this.products.Add(product);
-            Console.WriteLine(products);
-              
-            return Ok(products);
-        }
-
-        public IHttpActionResult GetNoSQLMatchDataById(int idproduct)
-        {
-            foreach (var product in products)
+            try
             {
-                if (product.idproduct == idproduct)
-                {
-                    return Ok(product);
-                }
+                var connectionString = "mongodb://localhost";
+                var client = new MongoClient(connectionString);
+                var database = client.GetDatabase("matchdata");
+                var collection = database.GetCollection<BsonDocument>("matchdatas");
+
+                var filterBuilder = Builders<BsonDocument>.Filter;
+                var filter = filterBuilder.Gte("date_of_match", date1) & filterBuilder.Lte("date_of_match", date2);
+                var sort = Builders<BsonDocument>.Sort.Descending("score");
+
+                var cursor = collection.Find(filter).Limit(10).Sort(sort).ToCursor().ToEnumerable();
+                return Ok(cursor);
+         }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+        }
+        public IHttpActionResult DeleteNoSQLMatchData(int playerid)
+        {
+            try
+            {
+                var connectionString = "mongodb://localhost";
+                var client = new MongoClient(connectionString);
+                var database = client.GetDatabase("matchdata");
+                var collection = database.GetCollection<BsonDocument>("matchdatas");
+
+                var filter = Builders<BsonDocument>.Filter.Eq("idplayerdata", playerid);
+                collection.DeleteOne(filter);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
             }
 
-            return NotFound();
         }
 
-        public IHttpActionResult DeleteNoSQLMatchData(int idproduct)
+        public IHttpActionResult PutNoSQLMatchData(MatchData match)
         {
-            foreach (var product in products)
+            try
             {
-                if (product.idproduct == idproduct)
+                var connectionString = "mongodb://localhost";
+                var client = new MongoClient(connectionString);
+
+                var database = client.GetDatabase("matchdata");
+                var collection = database.GetCollection<BsonDocument>("matchdatas");
+                var matchData = new BsonDocument
                 {
-                    products.Remove(product);
-                    return Ok(products);
-                }
+                    { "idplayerdata", match.idplayerdata.ToString() },
+                    { "score", match.score.ToString() },
+                    { "date_of_match", match.date_of_match.ToString() }
+                };
+                collection.InsertOne(matchData);
+                return Ok();
             }
-
-            return NotFound();
-        }
-
-        public IHttpActionResult PutNoSQLMatchData(MatchData _product)
-        {
-            foreach (var product in products)
+            catch (Exception e)
             {
-                if (product.idproduct == _product.idproduct)
-                {
-                    products.Remove(product);
-                    products.Add(_product);
-                    return Ok(products);
-                }
+                Console.WriteLine(e.ToString());
+                return NotFound();
             }
-
-            return NotFound();
         }
     }
 }

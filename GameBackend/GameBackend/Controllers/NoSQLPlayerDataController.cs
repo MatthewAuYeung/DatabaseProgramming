@@ -13,7 +13,6 @@ namespace GameBackend.Controllers
 {
     public class NoSQLPlayerDataController : ApiController
     {
-        IList<PlayerData> playerDatas;
         public IHttpActionResult GetNoSQLPlayerData(string username)
         {
             try
@@ -23,7 +22,7 @@ namespace GameBackend.Controllers
                 var database = client.GetDatabase("playerdata");
                 var collection = database.GetCollection<BsonDocument>("playerdatas");
 
-                var filter = Builders<BsonDocument>.Filter.Gt("username", username);
+                var filter = Builders<BsonDocument>.Filter.Eq("username", username);
                 var cursor = collection.Find(filter).ToCursor();
                 foreach (var playerData in cursor.ToEnumerable())
                 {
@@ -47,7 +46,7 @@ namespace GameBackend.Controllers
                 var database = client.GetDatabase("playerdata");
                 var collection = database.GetCollection<BsonDocument>("playerdatas");
 
-                var filter = Builders<BsonDocument>.Filter.Gt("idplayerdata", playerid);
+                var filter = Builders<BsonDocument>.Filter.Eq("idplayerdata", playerid);
                 var cursor = collection.Find(filter).ToCursor();
                 foreach (var playerData in cursor.ToEnumerable())
                 {
