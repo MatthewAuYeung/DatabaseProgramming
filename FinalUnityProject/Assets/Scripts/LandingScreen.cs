@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class LandingScreen : MonoBehaviour
 {
     public InputField username;
@@ -18,8 +17,10 @@ public class LandingScreen : MonoBehaviour
     private Button achivementButton;
     [SerializeField]
     private Button updateprofileButton;
+    [SerializeField]
+    private Button rankingListButton;
 
-    private bool _login = false;
+    private bool _login = true;
     private void Awake()
     {
         username = GetComponent<InputField>();
@@ -32,6 +33,7 @@ public class LandingScreen : MonoBehaviour
         contactusButton.onClick.AddListener(ContactUsButtonClickedCallback);
         achivementButton.onClick.AddListener(AchivementButtonClickedCallback);
         updateprofileButton.onClick.AddListener(UpdateProfileButtonClickedCallback);
+        rankingListButton.onClick.AddListener(RankListButtonClickedCallback);
     }
 
     private void SettingButtonClickedCallback()
@@ -54,6 +56,11 @@ public class LandingScreen : MonoBehaviour
         ScreenManagerScript.Instance().PushScreen("UpdateProfileScreen");
     }
 
+    private void RankListButtonClickedCallback()
+    {
+        ScreenManagerScript.Instance().PushScreen("RankingListScreen");
+    }
+
     private void OnDestroy()
     {
         startGameButton.onClick.RemoveListener(StartButtonClickdCallback);
@@ -74,6 +81,7 @@ public class LandingScreen : MonoBehaviour
 
     public void Login()
     {
-        _login = true;
+        WebClient.Instance().getPlayerByusername(username.ToString());
+
     }
 }

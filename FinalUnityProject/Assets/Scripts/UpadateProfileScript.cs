@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-
 public class UpadateProfileScript : MonoBehaviour
 {
     public InputField usernameInput;
@@ -10,6 +7,7 @@ public class UpadateProfileScript : MonoBehaviour
     public InputField lastnameInput;
     public InputField dobInput;
     public InputField emailInput;
+    public Toggle toggle;
 
     // Start is called before the first frame update
     void Start()
@@ -24,5 +22,29 @@ public class UpadateProfileScript : MonoBehaviour
     public void CloseScreen()
     {
         ScreenManagerScript.Instance().PopScreen();
+    }
+
+    public void UpdatePlayer()
+    {
+        PlayerData newplayer = new PlayerData(1,
+            usernameInput.ToString(),
+            firstnameInput.ToString(),
+            lastnameInput.ToString(),
+            emailInput.ToString(),
+            dobInput.ToString(),
+            toggle);
+        WebClient.Instance().addPlayer(newplayer);           
+    }
+
+    public void AddPlayer()
+    {
+        PlayerData newplayer = new PlayerData(1,
+            usernameInput.ToString(),
+            firstnameInput.ToString(),
+            lastnameInput.ToString(),
+            emailInput.ToString(),
+            dobInput.ToString(),
+            toggle);
+        WebClient.Instance().addPlayer(newplayer);
     }
 }

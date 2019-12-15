@@ -94,6 +94,6 @@ public class GameManager : MonoBehaviour
     public void BackToMenu()
     {
         Time.timeScale = 1.0f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameLoader");
+        SceneManager.LoadScene("GameLoader");
     }
 }
