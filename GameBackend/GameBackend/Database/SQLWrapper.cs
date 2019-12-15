@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using GameBackend.Models;
 
-namespace MySqlConsoleApp
+namespace GameBackend.Database
 {
-    abstract class SQLWrapperV2
+    public abstract class SQLWrapper
     {
         // Members
+        public PlayerData playerData;
+        public MatchData matchData;
         protected MySqlConnection conn;
 
         // Functions
@@ -19,7 +22,7 @@ namespace MySqlConsoleApp
             var username = System.Configuration.ConfigurationManager.AppSettings["username"];
             var password = System.Configuration.ConfigurationManager.AppSettings["password"];
             var port = System.Configuration.ConfigurationManager.AppSettings["port"];
-            var database= System.Configuration.ConfigurationManager.AppSettings["database"];
+            var database = System.Configuration.ConfigurationManager.AppSettings["database"];
             return "server=" + server + ";user=" + username + ";database=" + database + ";port=" + port + ";password=" + password;
         }
         public void execute()
