@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
-using GameBackend.Database;
+using GameBackend.SQLDatabase;
 
 namespace GameBackend.Controllers
 {
@@ -13,10 +13,26 @@ namespace GameBackend.Controllers
     {
         public IHttpActionResult Get(string username)
         {
-            GetSQLPlayer getSQLPlayer = new GetSQLPlayer();
+            GetSQLPlayerByUsername getSQLPlayer = new GetSQLPlayerByUsername();
             try
             {
                 getSQLPlayer.playerData.username = username;
+                getSQLPlayer.execute();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return NotFound();
+            }
+            return Ok(getSQLPlayer.playerData);
+        }
+
+        public IHttpActionResult Get(int playerid)
+        {
+            GetSQLPlayerByID getSQLPlayer = new GetSQLPlayerByID();
+            try
+            {
+                getSQLPlayer.playerData.idplayerdata = playerid;
                 getSQLPlayer.execute();
             }
             catch (Exception e)
