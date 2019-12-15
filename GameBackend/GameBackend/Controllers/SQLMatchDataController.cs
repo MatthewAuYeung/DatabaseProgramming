@@ -8,48 +8,32 @@ using System.Web.Mvc;
 
 namespace GameBackend.Controllers
 {
-    public class ProductController : ApiController
+    public class SQLMatchDataController : ApiController
     {
-        IList<Product> products = new List<Product>
+        IList<PlayerData> products = new List<MatchData>
             {
-                new Product
+                new PlayerData
                 {
-                    idproduct = 1,
-                    productName = "Biscuits",
-                    manufacturingYear = 2018,
-                    brandName="ParleG"
                 },
-                new Product
+                new PlayerData
                 {
-                    idproduct = 2,
-                    productName = "Cars",
-                    manufacturingYear = 2018,
-                    brandName="BMW"
                 },
-                new Product
+                new PlayerData
                 {
-                    idproduct = 3,
-                    productName = "Cars",
-                    manufacturingYear = 2018,
-                    brandName="Mercedese"
                 },
-                new Product
+                new PlayerData
                 {
-                    idproduct = 4,
-                    productName = "Brush",
-                    manufacturingYear = 2017,
-                    brandName="Colgate"
                 }
 
             };
 
 
-        public IEnumerable<Product> GetProducts()
+        public IEnumerable<PlayerData> GetSQLMatchData()
         { 
             return products;
         }
 
-        public IHttpActionResult PostNewProduct(Product product)
+        public IHttpActionResult PostNewSQLMatchData(MatchData product)
         {
             this.products.Add(product);
             Console.WriteLine(products);
@@ -57,7 +41,7 @@ namespace GameBackend.Controllers
             return Ok(products);
         }
 
-        public IHttpActionResult GetProductById(int idproduct)
+        public IHttpActionResult GetSQLMatchDataById(int idproduct)
         {
             foreach (var product in products)
             {
@@ -70,7 +54,7 @@ namespace GameBackend.Controllers
             return NotFound();
         }
 
-        public IHttpActionResult DeleteProduct(int idproduct)
+        public IHttpActionResult DeleteSQLMatchData(int idproduct)
         {
             foreach (var product in products)
             {
@@ -84,7 +68,7 @@ namespace GameBackend.Controllers
             return NotFound();
         }
 
-        public IHttpActionResult PutProduct(Product _product)
+        public IHttpActionResult PutSQLMatchData(MatchData _product)
         {
             foreach (var product in products)
             {
