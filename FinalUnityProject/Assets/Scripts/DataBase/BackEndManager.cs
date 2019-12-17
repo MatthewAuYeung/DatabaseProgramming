@@ -21,6 +21,7 @@ public class BackEndManager : MonoBehaviour
     public bool IsMatchDataRecieved = false;
 
     public PlayerData playerData;
+    public List<PlayerData> playerDatas;
     public List<MatchData> matchDatas;
     public string RawData;
     //--------------------------------------------------------------
@@ -31,6 +32,7 @@ public class BackEndManager : MonoBehaviour
             instance = this;
 
             playerData = new PlayerData();
+            playerDatas = new List<PlayerData>();
             matchDatas = new List<MatchData>();
         }
         else

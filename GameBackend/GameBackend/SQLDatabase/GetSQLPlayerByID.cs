@@ -11,14 +11,14 @@ namespace GameBackend.SQLDatabase
     {
         protected override void SQLCommands()
         {
-            string sql = string.Format("SELECT idplayerdata, first_name, last_name, email, date_of_birth, notification FROM playerdata WHERE idplayerdata = '{0}'", playerData.idplayerdata);
+            string sql = string.Format("SELECT username, first_name, last_name, email, date_of_birth, notification FROM playerdata WHERE idplayerdata = '{0}'", playerData.idplayerdata);
 
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
 
             while (rdr.Read())
             {
-                playerData.idplayerdata = rdr.GetInt32(0);
+                playerData.username = rdr.GetString(0);
                 playerData.first_name = rdr.GetString(1);
                 playerData.last_name = rdr.GetString(2);
                 playerData.email = rdr.GetString(3);

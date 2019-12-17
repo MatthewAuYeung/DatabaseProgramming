@@ -21,9 +21,10 @@ namespace GameBackend.SQLDatabase
             int count = 0;
             while (rdr.Read())
             {
-                matchData.playerdata_idplayerdata = rdr.GetInt32(0);
-                matchData.score = rdr.GetInt32(1);
-                matchDatas[count] = matchData;
+                MatchData temp = new MatchData();
+                temp.playerdata_idplayerdata = rdr.GetInt32(0);
+                temp.score = rdr.GetInt32(1);
+                matchDatas[count] = temp;
                 ++count;
             }
             rdr.Close();

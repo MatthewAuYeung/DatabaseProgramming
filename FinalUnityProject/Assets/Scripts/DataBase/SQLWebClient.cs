@@ -31,6 +31,7 @@ public class SQLWebClient : WebClient
 
     public override IEnumerator GetPlayerByID(int id)
     {
+        BackEndManager.Instance().IsPlayerDataRecieved = false;
         string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Get?playerid=" + id.ToString();
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -44,7 +45,8 @@ public class SQLWebClient : WebClient
             else
             {
                 Debug.Log(uri + " Received: " + webRequest.downloadHandler.text);
-                BackEndManager.Instance().playerData = JsonUtility.FromJson<PlayerData>(webRequest.downloadHandler.text);
+                var temp = JsonUtility.FromJson<PlayerData>(webRequest.downloadHandler.text);
+                BackEndManager.Instance().playerDatas.Add(temp);
                 BackEndManager.Instance().IsPlayerDataRecieved = true;
             }
         }
