@@ -43,20 +43,20 @@ namespace GameBackend.Controllers
             return Ok(getSQLPlayer.playerData);
         }
 
-        public IHttpActionResult Post(string username)
+        public IHttpActionResult Post(PlayerData player)
         {
-            UpdateSQLPlayer updateSQLPlayer = new UpdateSQLPlayer();
+            AddSQLPlayer addSQLPlayer = new AddSQLPlayer();
             try
             {
-                updateSQLPlayer.playerData.username = username;
-                updateSQLPlayer.execute();
+                addSQLPlayer.playerData = player;
+                addSQLPlayer.execute();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 return NotFound();
             }
-            return Ok(updateSQLPlayer.playerData);
+            return Ok(addSQLPlayer.playerData);
         }
 
         public IHttpActionResult Delete(string username)
@@ -75,20 +75,20 @@ namespace GameBackend.Controllers
             return Ok(deleteSQLPlayer.playerData);
         }
 
-        public IHttpActionResult Put(PlayerData player)
+        public IHttpActionResult Put(string username)
         {
-            AddSQLPlayer addSQLPlayer = new AddSQLPlayer();
+            UpdateSQLPlayer updateSQLPlayer = new UpdateSQLPlayer();
             try
             {
-                addSQLPlayer.playerData = player;
-                addSQLPlayer.execute();
+                updateSQLPlayer.playerData.username = username;
+                updateSQLPlayer.execute();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 return NotFound();
             }
-            return Ok(addSQLPlayer.playerData);
+            return Ok(updateSQLPlayer.playerData);
         }
     }
 }

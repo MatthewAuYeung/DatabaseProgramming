@@ -61,7 +61,7 @@ namespace GameBackend.Controllers
             return Ok();
         }
 
-        public IHttpActionResult Put(MatchData match)
+        public IHttpActionResult Post(MatchData match)
         {
             AddSQLMatch addSQLMatch = new AddSQLMatch();
             try

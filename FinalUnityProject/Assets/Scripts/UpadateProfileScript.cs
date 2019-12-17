@@ -33,7 +33,7 @@ public class UpadateProfileScript : MonoBehaviour
             emailInput.ToString(),
             dobInput.ToString(),
             toggle);
-        WebClient.Instance().addPlayer(newplayer);           
+        SQLWebClient.Instance().addPlayer(newplayer);           
     }
 
     public void AddPlayer()
@@ -45,6 +45,6 @@ public class UpadateProfileScript : MonoBehaviour
             emailInput.ToString(),
             dobInput.ToString(),
             toggle);
-        WebClient.Instance().addPlayer(newplayer);
+        SQLWebClient.Instance().addPlayer(newplayer);
     }
 }

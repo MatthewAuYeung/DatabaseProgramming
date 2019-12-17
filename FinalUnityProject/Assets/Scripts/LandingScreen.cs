@@ -81,7 +81,7 @@ public class LandingScreen : MonoBehaviour
 
     public void Login()
     {
-        WebClient.Instance().getPlayerByusername(username.ToString());
+        SQLWebClient.Instance().getPlayerByusername(username.ToString());
 
     }
 }
