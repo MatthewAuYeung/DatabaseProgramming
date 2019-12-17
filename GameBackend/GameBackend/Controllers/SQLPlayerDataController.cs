@@ -16,6 +16,7 @@ namespace GameBackend.Controllers
             GetSQLPlayerByUsername getSQLPlayer = new GetSQLPlayerByUsername();
             try
             {
+                getSQLPlayer.playerData = new PlayerData();
                 getSQLPlayer.playerData.username = username;
                 getSQLPlayer.execute();
             }
@@ -32,6 +33,7 @@ namespace GameBackend.Controllers
             GetSQLPlayerByID getSQLPlayer = new GetSQLPlayerByID();
             try
             {
+                getSQLPlayer.playerData = new PlayerData();
                 getSQLPlayer.playerData.idplayerdata = playerid;
                 getSQLPlayer.execute();
             }
@@ -43,20 +45,21 @@ namespace GameBackend.Controllers
             return Ok(getSQLPlayer.playerData);
         }
 
-        public IHttpActionResult Post(string username)
+        public IHttpActionResult Post(PlayerData player)
         {
-            UpdateSQLPlayer updateSQLPlayer = new UpdateSQLPlayer();
+            AddSQLPlayer addSQLPlayer = new AddSQLPlayer();
             try
             {
-                updateSQLPlayer.playerData.username = username;
-                updateSQLPlayer.execute();
+                addSQLPlayer.playerData = new PlayerData();
+                addSQLPlayer.playerData = player;
+                addSQLPlayer.execute();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 return NotFound();
             }
-            return Ok(updateSQLPlayer.playerData);
+            return Ok(addSQLPlayer.playerData);
         }
 
         public IHttpActionResult Delete(string username)
@@ -64,6 +67,7 @@ namespace GameBackend.Controllers
             DeleteSQLPlayer deleteSQLPlayer = new DeleteSQLPlayer();
             try
             {
+                deleteSQLPlayer.playerData = new PlayerData();
                 deleteSQLPlayer.playerData.username = username;
                 deleteSQLPlayer.execute();                
             }
@@ -77,18 +81,19 @@ namespace GameBackend.Controllers
 
         public IHttpActionResult Put(PlayerData player)
         {
-            AddSQLPlayer addSQLPlayer = new AddSQLPlayer();
+            UpdateSQLPlayer updateSQLPlayer = new UpdateSQLPlayer();
             try
             {
-                addSQLPlayer.playerData = player;
-                addSQLPlayer.execute();
+                updateSQLPlayer.playerData = new PlayerData();
+                updateSQLPlayer.playerData = player;
+                updateSQLPlayer.execute();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 return NotFound();
             }
-            return Ok(addSQLPlayer.playerData);
+            return Ok(updateSQLPlayer.playerData);
         }
     }
 }

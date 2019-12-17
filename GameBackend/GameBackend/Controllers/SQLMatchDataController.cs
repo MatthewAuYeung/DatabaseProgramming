@@ -16,7 +16,9 @@ namespace GameBackend.Controllers
             GetSQLMatchByID getSQLMatchByID = new GetSQLMatchByID();
             try
             {
-                getSQLMatchByID.matchData.idplayerdata = playerid;
+                getSQLMatchByID.matchData = new MatchData();
+
+                getSQLMatchByID.matchData.playerdata_idplayerdata = playerid;
                 getSQLMatchByID.execute();
             }
             catch (Exception e)
@@ -32,6 +34,8 @@ namespace GameBackend.Controllers
             GetSQLMatchByDates getSQLMatchByDates = new GetSQLMatchByDates();
             try
             {
+                getSQLMatchByDates.matchData = new MatchData();
+
                 getSQLMatchByDates.start_date = date1;
                 getSQLMatchByDates.end_date = date2;
 
@@ -50,7 +54,9 @@ namespace GameBackend.Controllers
             DeleteSQLMatch deleteSQLMatch = new DeleteSQLMatch();
             try
             {
-                deleteSQLMatch.matchData.idplayerdata = playerid;
+                deleteSQLMatch.matchData = new MatchData();
+
+                deleteSQLMatch.matchData.playerdata_idplayerdata = playerid;
                 deleteSQLMatch.execute();
             }
             catch (Exception e)
@@ -61,11 +67,13 @@ namespace GameBackend.Controllers
             return Ok();
         }
 
-        public IHttpActionResult Put(MatchData match)
+        public IHttpActionResult Post(MatchData match)
         {
             AddSQLMatch addSQLMatch = new AddSQLMatch();
             try
             {
+                addSQLMatch.matchData = new MatchData();
+
                 addSQLMatch.matchData = match;
                 addSQLMatch.execute();
             }

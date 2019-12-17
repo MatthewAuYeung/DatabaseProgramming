@@ -22,11 +22,11 @@ namespace GameBackend.SQLDatabase
         protected abstract void SQLCommands();
         private string readConfig()
         {
-            var server = System.Configuration.ConfigurationManager.AppSettings["server"];
-            var username = System.Configuration.ConfigurationManager.AppSettings["username"];
-            var password = System.Configuration.ConfigurationManager.AppSettings["password"];
-            var port = System.Configuration.ConfigurationManager.AppSettings["port"];
-            var database = System.Configuration.ConfigurationManager.AppSettings["database"];
+            var server = "localhost"; //System.Configuration.ConfigurationManager.AppSettings["server"];
+            var username = "root"; //System.Configuration.ConfigurationManager.AppSettings["username"];
+            var password = "password"; //System.Configuration.ConfigurationManager.AppSettings["password"];
+            var port = "3306"; //System.Configuration.ConfigurationManager.AppSettings["port"];
+            var database = "final"; //System.Configuration.ConfigurationManager.AppSettings["database"];
             return "server=" + server + ";user=" + username + ";database=" + database + ";port=" + port + ";password=" + password;
         }
         public void execute()

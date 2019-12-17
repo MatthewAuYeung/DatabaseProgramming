@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour
 {
-
+    private SQLWebClient sqlWebClient = new SQLWebClient();
     int score = 0;
     static public int lastscore = 0;
     public TextMeshProUGUI CurrentScoreTextTMPro;
@@ -52,7 +53,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    
+
 
     public void addScore()
     {
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviour
 
     public void Gameover()
     {
+        UploadMatch();
         StartCoroutine(GameoverCoroutine());
     }
 
@@ -94,6 +96,18 @@ public class GameManager : MonoBehaviour
     public void BackToMenu()
     {
         Time.timeScale = 1.0f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameLoader");
+        SceneManager.LoadScene("GameLoader");
+    }
+
+    public void UploadMatch()
+    {
+        DateTime date = DateTime.Now;
+        string date_of_match = date.ToString("yyyy-MM-dd");
+        lastscore = score;
+        MatchData newMatch = new MatchData();
+        newMatch.InitializeMatch(GameLoader.playerID, lastscore, date_of_match);
+
+        StartCoroutine(GameoverCoroutine());
+        StartCoroutine(sqlWebClient.AddMatch(newMatch));
     }
 }

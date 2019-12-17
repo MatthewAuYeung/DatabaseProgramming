@@ -10,8 +10,8 @@ namespace GameBackend.SQLDatabase
     {
         protected override void SQLCommands()
         {
-            string sql = string.Format("INSERT INTO matchdata (playerdata_idplayerdata, score, date_of_match) VALUES('{0}', '{1}', '{2}')", 
-                matchData.idplayerdata, matchData.score, matchData.date_of_match);
+            string sql = string.Format("INSERT INTO final.matchdata (playerdata_idplayerdata, score, date_of_match) VALUES('{0}', '{1}', '{2}')", 
+                matchData.playerdata_idplayerdata, matchData.score, matchData.date_of_match);
 
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.ExecuteNonQuery();

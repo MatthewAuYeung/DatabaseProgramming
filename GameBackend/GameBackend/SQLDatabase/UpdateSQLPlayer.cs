@@ -10,8 +10,8 @@ namespace GameBackend.SQLDatabase
     {
         protected override void SQLCommands()
         {
-            string sql = string.Format("UPDATE playerdata SET username = '{0}', first_name = '{1}', last_name = '{2}', email = '{3}', date_of_birth = '{4}', notification = '{5}' WHERE username = '{0}';",
-                 playerData.username, playerData.first_name, playerData.last_name, playerData.email, playerData.date_of_birth, playerData.notification);
+            string sql = string.Format("UPDATE playerdata SET username = '{0}', first_name = '{1}', last_name = '{2}', email = '{3}', date_of_birth = '{4}', notification = {5} WHERE idplayerdata = {6};",
+                 playerData.username, playerData.first_name, playerData.last_name, playerData.email, playerData.date_of_birth, playerData.notification, playerData.idplayerdata);
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.ExecuteNonQuery();
         }

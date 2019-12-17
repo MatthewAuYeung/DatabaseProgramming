@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameLoader : MonoBehaviour
-{
+{ 
+    static public int playerID;
+    static public string playerInfo;
     private GameSystems gameSystems = null;
     private void Start()
     {

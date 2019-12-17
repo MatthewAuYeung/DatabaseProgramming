@@ -14,5 +14,7 @@ namespace GameBackend.Models
         public string email { get; set; }
         public string date_of_birth { get; set; }
         public bool notification { get; set; }
+
+        public bool IsFound = false;
     }
 }

@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class LandingScreen : MonoBehaviour
 {
+    SQLWebClient sQLWebClient = new SQLWebClient();
+    [SerializeField]
     public InputField username;
-
     [SerializeField]
     private Button startGameButton;
     [SerializeField]
@@ -18,12 +18,10 @@ public class LandingScreen : MonoBehaviour
     private Button achivementButton;
     [SerializeField]
     private Button updateprofileButton;
+    [SerializeField]
+    private Button rankingListButton;
 
     private bool _login = false;
-    private void Awake()
-    {
-        username = GetComponent<InputField>();
-    }
 
     private void Start()
     {
@@ -32,6 +30,7 @@ public class LandingScreen : MonoBehaviour
         contactusButton.onClick.AddListener(ContactUsButtonClickedCallback);
         achivementButton.onClick.AddListener(AchivementButtonClickedCallback);
         updateprofileButton.onClick.AddListener(UpdateProfileButtonClickedCallback);
+        rankingListButton.onClick.AddListener(RankListButtonClickedCallback);
     }
 
     private void SettingButtonClickedCallback()
@@ -54,6 +53,11 @@ public class LandingScreen : MonoBehaviour
         ScreenManagerScript.Instance().PushScreen("UpdateProfileScreen");
     }
 
+    private void RankListButtonClickedCallback()
+    {
+        ScreenManagerScript.Instance().PushScreen("RankingListScreen");
+    }
+
     private void OnDestroy()
     {
         startGameButton.onClick.RemoveListener(StartButtonClickdCallback);
@@ -61,7 +65,7 @@ public class LandingScreen : MonoBehaviour
 
     private void StartButtonClickdCallback()
     {
-        if(_login)
+        if (_login)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
         }
@@ -74,6 +78,23 @@ public class LandingScreen : MonoBehaviour
 
     public void Login()
     {
-        _login = true;
+        StartCoroutine(sQLWebClient.GetPlayerByUsername(username.text));
+    }
+
+    public void Delete()
+    {
+        StartCoroutine(sQLWebClient.DeletePlayer(username.text));
+    }
+
+    private void FixedUpdate()
+    {
+        if (BackEndManager.Instance().playerData.IsFound)
+        {
+            _login = true;
+        }
+        else
+        {
+            _login = false;
+        }
     }
 }
