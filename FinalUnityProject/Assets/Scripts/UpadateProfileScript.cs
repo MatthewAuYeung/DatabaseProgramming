@@ -28,6 +28,7 @@ public class UpadateProfileScript : MonoBehaviour
             emailInput.text,
             dobInput.text,
             toggle);
+        newplayer.idplayerdata = GameLoader.playerID;
         StartCoroutine(sqlWebClient.UpdatePlayerProfile(newplayer));           
     }
 

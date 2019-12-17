@@ -14,7 +14,7 @@ public class PlayerData
         this.notification = notification;
     }
 
-    public int idplayer;
+    public int idplayerdata;
     public string username;
     public string first_name;
     public string last_name;

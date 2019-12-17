@@ -8,7 +8,7 @@ public class SQLWebClient : WebClient
 {
     public override IEnumerator GetPlayerByUsername(string username)
     {
-        BackEndManager.Instance().IsRecieved = false;
+        BackEndManager.Instance().IsPlayerDataRecieved = false;
         string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Get?username=" + username;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -23,14 +23,15 @@ public class SQLWebClient : WebClient
             {
                 Debug.Log(uri + " Received: " + webRequest.downloadHandler.text);
                 BackEndManager.Instance().playerData = JsonUtility.FromJson<PlayerData>(webRequest.downloadHandler.text);
-                BackEndManager.Instance().IsRecieved = true;
+                BackEndManager.Instance().IsPlayerDataRecieved = true;
+                GameLoader.playerID = BackEndManager.Instance().playerData.idplayerdata;
             }
         }
     }
 
     public override IEnumerator GetPlayerByID(int id)
     {
-        string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Get?idplayerdata=" + id.ToString();
+        string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Get?playerid=" + id.ToString();
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
@@ -44,14 +45,14 @@ public class SQLWebClient : WebClient
             {
                 Debug.Log(uri + " Received: " + webRequest.downloadHandler.text);
                 BackEndManager.Instance().playerData = JsonUtility.FromJson<PlayerData>(webRequest.downloadHandler.text);
-                BackEndManager.Instance().IsRecieved = true;
+                BackEndManager.Instance().IsPlayerDataRecieved = true;
             }
         }
     }
 
     public override IEnumerator UpdatePlayerProfile(PlayerData PlayerData)
     {
-        string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Put";
+        string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL +"Put";
         string jsonData = JsonUtility.ToJson(PlayerData);
 
         UnityWebRequest webRequest = new UnityWebRequest(uri, "Put");
@@ -72,13 +73,11 @@ public class SQLWebClient : WebClient
         }
     }
 
-    public override IEnumerable DeletePlayer(string username)
+    public override IEnumerator DeletePlayer(string username)
     {
-        string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Delete";
+        string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Delete?username="+username;
 
-        UnityWebRequest webRequest = new UnityWebRequest(uri, "Delete");
-        webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-        webRequest.SetRequestHeader("Content-Type", "application/json");
+        UnityWebRequest webRequest = UnityWebRequest.Delete(uri);
         yield return webRequest.SendWebRequest();
 
         if (webRequest.isNetworkError)
@@ -87,7 +86,7 @@ public class SQLWebClient : WebClient
         }
         else
         {
-            Debug.Log(uri + " Received: " + webRequest.downloadHandler.text);
+            Debug.Log(uri);
         }
     }
 
@@ -116,10 +115,18 @@ public class SQLWebClient : WebClient
     }
 
     //-------------------------------------------------------------------------------------------------------------
+    [Serializable]
+    public class RootObject
+    {
+        public MatchData[] rootData;
+    }
+
     public override IEnumerator GetMatchesByPlayerID(int player_id)
     {
-        BackEndManager.Instance().IsRecieved = false;
-        string uri = BackEndManager.Instance().SQL_MATCH_BASE_URL + "Get?idplayerdata=" + player_id.ToString();
+        BackEndManager.Instance().IsMatchDataRecieved = false;
+        BackEndManager.Instance().matchDatas.Clear();
+        //string uri = BackEndManager.Instance().SQL_MATCH_BASE_URL + "Get?playerdata_idplayerdata=" + player_id.ToString();
+        string uri = BackEndManager.Instance().SQL_MATCH_BASE_URL + "Get?playerid=" + player_id;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
@@ -132,15 +139,22 @@ public class SQLWebClient : WebClient
             else
             {
                 Debug.Log(uri + " Received: " + webRequest.downloadHandler.text);
-                BackEndManager.Instance().playerData = JsonUtility.FromJson<PlayerData>(webRequest.downloadHandler.text);
-                BackEndManager.Instance().IsRecieved = true;
+                RootObject rawData = JsonUtility.FromJson<RootObject>("{\"rootData\":" + webRequest.downloadHandler.text + "}");
+                foreach (var Data in rawData.rootData)
+                {
+                    if(Data.date_of_match!=null)
+                        BackEndManager.Instance().matchDatas.Add(Data);
+                }
+
+                BackEndManager.Instance().IsMatchDataRecieved = true;
             }
         }
     }
     public override IEnumerator GetMatchesBetween(string from_date, string to_date)
     {
-        BackEndManager.Instance().IsRecieved = false;
-        string uri = BackEndManager.Instance().SQL_MATCH_BASE_URL + "Get?date_of_match=" + from_date + "&date_of_match" + to_date;
+        BackEndManager.Instance().IsMatchDataRecieved = false;
+        BackEndManager.Instance().matchDatas.Clear();
+        string uri = BackEndManager.Instance().SQL_MATCH_BASE_URL + "Get?date1=" + from_date + "&date2=" + to_date;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
@@ -153,13 +167,19 @@ public class SQLWebClient : WebClient
             else
             {
                 Debug.Log(uri + " Received: " + webRequest.downloadHandler.text);
-                BackEndManager.Instance().matchDatas.Add(JsonUtility.FromJson<MatchData>(webRequest.downloadHandler.text));
-                BackEndManager.Instance().IsRecieved = true;
+                RootObject rawData = JsonUtility.FromJson<RootObject>("{\"rootData\":" + webRequest.downloadHandler.text + "}");
+                foreach (var Data in rawData.rootData)
+                {
+                    if (Data.date_of_match != null)
+                        BackEndManager.Instance().matchDatas.Add(Data);
+                }
+
+                BackEndManager.Instance().IsMatchDataRecieved = true;
             }
         }
     }
 
-    public override IEnumerable DeleteMatch(int player_id)
+    public override IEnumerator DeleteMatch(int player_id)
     {
         string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Delete" + player_id.ToString();
 
@@ -200,4 +220,3 @@ public class SQLWebClient : WebClient
         }
     }
 }
-

@@ -89,7 +89,7 @@ namespace GameBackend.Controllers
                 var collection = database.GetCollection<BsonDocument>("matchdatas");
                 var matchData = new BsonDocument
                 {
-                    { "idplayerdata", match.idplayerdata.ToString() },
+                    { "idplayerdata", match.playerdata_idplayerdata.ToString() },
                     { "score", match.score.ToString() },
                     { "date_of_match", match.date_of_match.ToString() }
                 };

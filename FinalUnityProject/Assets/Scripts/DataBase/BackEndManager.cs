@@ -14,13 +14,15 @@ public class BackEndManager : MonoBehaviour
     // public members
     public string SQL_PLAYER_BASE_URL = "http://localhost:50531/api/SQLPlayerData/";
     public string SQL_MATCH_BASE_URL = "http://localhost:50531/api/SQLMatchData/";
-    public string NOSQL_PLAYER_BASE_URL = "http://localhost:50531/api/NoSQLPlayer/";
+    public string NOSQL_PLAYER_BASE_URL = "http://localhost:50531/api/NoSQLPlayerData/";
     public string NOSQL_MATCH_BASE_URL = "http://localhost:50531/api/NoSQLMatchData/";
 
-    public bool IsRecieved = false;
+    public bool IsPlayerDataRecieved = false;
+    public bool IsMatchDataRecieved = false;
 
     public PlayerData playerData;
     public List<MatchData> matchDatas;
+    public string RawData;
     //--------------------------------------------------------------
     private void Awake()
     {

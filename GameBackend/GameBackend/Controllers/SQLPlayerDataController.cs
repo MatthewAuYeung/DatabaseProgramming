@@ -79,13 +79,13 @@ namespace GameBackend.Controllers
             return Ok(deleteSQLPlayer.playerData);
         }
 
-        public IHttpActionResult Put(string username)
+        public IHttpActionResult Put(PlayerData player)
         {
             UpdateSQLPlayer updateSQLPlayer = new UpdateSQLPlayer();
             try
             {
                 updateSQLPlayer.playerData = new PlayerData();
-                updateSQLPlayer.playerData.username = username;
+                updateSQLPlayer.playerData = player;
                 updateSQLPlayer.execute();
             }
             catch (Exception e)

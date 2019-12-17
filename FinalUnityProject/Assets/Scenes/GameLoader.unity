@@ -384,6 +384,31 @@ PrefabInstance:
       propertyPath: rankingListButton
       value: 
       objectReference: {fileID: 1505465912}
+    - target: {fileID: 8350344642307365213, guid: 90c8b482bffa2b441abf42e29706b9eb,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -570
+      objectReference: {fileID: 0}
+    - target: {fileID: 8350344642307365213, guid: 90c8b482bffa2b441abf42e29706b9eb,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 331
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858523417382775903, guid: 90c8b482bffa2b441abf42e29706b9eb,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -192
+      objectReference: {fileID: 0}
+    - target: {fileID: 5858523417382775903, guid: 90c8b482bffa2b441abf42e29706b9eb,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 331
+      objectReference: {fileID: 0}
+    - target: {fileID: 160120195507358078, guid: 90c8b482bffa2b441abf42e29706b9eb,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Delete
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90c8b482bffa2b441abf42e29706b9eb, type: 3}
 --- !u!1 &1942027519

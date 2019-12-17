@@ -7,6 +7,7 @@ using System.Linq;
 
 public class RankingListScript : MonoBehaviour
 {
+    SQLWebClient sQLWebClient = new SQLWebClient();
     public InputField dateYearFromInput;
     public InputField dateMonthFromInput;
     public InputField dateDayFromInput;
@@ -20,16 +21,14 @@ public class RankingListScript : MonoBehaviour
     private List<HighScoreEntry> highScoreEntryList;
     private List<Transform> highScoreEntryTransformList;
 
+    private bool show;
+
     // Start is called before the first frame update
     void Start()
     {
         entryTemplate.gameObject.SetActive(false);
-        dateYearFromInput = GetComponent<InputField>();
-        dateMonthFromInput = GetComponent<InputField>();
-        dateDayFromInput = GetComponent<InputField>();
-        dateYearToInput = GetComponent<InputField>();
-        dateMonthToInput = GetComponent<InputField>();
-        dateDayToInput = GetComponent<InputField>();
+        highScoreEntryList = new List<HighScoreEntry>();
+        show = false;
     }
 
     public void CloseScreen()
@@ -39,56 +38,65 @@ public class RankingListScript : MonoBehaviour
 
     public void ShowRankingList()
     {
-        //do somethuing;
-        //DateTime date = DateTime.Now;
-        //string ss =  date.ToString("yyyy-MM-dd");
+        int from_year = Int32.Parse(dateYearFromInput.text);
+        int from_month = Int32.Parse(dateMonthFromInput.text);
+        int from_day = Int32.Parse(dateDayFromInput.text);
 
-        highScoreEntryList = new List<HighScoreEntry>()
-        {
-             new HighScoreEntry{score=1032,name="nesdcil"},
-             new HighScoreEntry{score=1035,name="nexzvil"},
-             new HighScoreEntry{score=1037,name="newzxcil"},
-             new HighScoreEntry{score=10372,name="neczcil"},
-             new HighScoreEntry{score=1032,name="nedasil"},
-             new HighScoreEntry{score=10332,name="ne42il"},
-             new HighScoreEntry{score=10932,name="neewqil"},
-             new HighScoreEntry{score=11032,name="nesdawil"},
-             new HighScoreEntry{score=10032,name="neasdail"},
-             new HighScoreEntry{score=102232,name="fdsd"},
-        };
-        //for (int i = 0; i < highScoreEntryList.Count(); i++)
-        //{
-        //    for (int j = 0; j < highScoreEntryList.Count(); j++)
-        //    {
-        //        if (highScoreEntryList[j].score<highScoreEntryList[i].score)
-        //        {
-        //            HighScoreEntry temp = highScoreEntryList[i];
-        //            highScoreEntryList[i] = highScoreEntryList[j];
-        //            highScoreEntryList[j] = temp;
-        //        }
-        //    }
-        //}
-        highScoreEntryTransformList = new List<Transform>();
-        foreach (HighScoreEntry highScoreEntry in highScoreEntryList)
-        {
-            CreateHighScoreEntryTransform(highScoreEntry, entryContainer, highScoreEntryTransformList);
-        }
+        int to_year = Int32.Parse(dateYearToInput.text);
+        int to_month= Int32.Parse(dateMonthToInput.text);
+        int to_day = Int32.Parse(dateDayToInput.text);
+        DateTime from = new DateTime(from_year, from_month, from_day);
+        DateTime to = new DateTime(to_year, to_month, to_day);
+
+        StartCoroutine(sQLWebClient.GetMatchesBetween(from.ToString("yyyy-MM-dd"), to.ToString("yyyy-MM-dd")));
+        show = true;
     }
-    private void CreateHighScoreEntryTransform(HighScoreEntry highScoreEntry, Transform container,List<Transform>transformsList )
+    private void CreateHighScoreEntryTransform(HighScoreEntry highScoreEntry, Transform container, List<Transform> transformsList)
     {
         float templateHeight = 25f;
-            Transform entryTransform = Instantiate(entryTemplate, container);
-            RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
-            entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformsList.Count());
-            entryTransform.gameObject.SetActive(true);
-            int rank = transformsList.Count() + 1;
-            entryTransform.Find("PosText").GetComponent<Text>().text = rank.ToString();
-            int score = highScoreEntry.score;
-            entryTransform.Find("NameText").GetComponent<Text>().text = score.ToString();
-            string name = highScoreEntry.name;
-            entryTransform.Find("ScoreText").GetComponent<Text>().text = name;
-            transformsList.Add(entryTransform);
+        Transform entryTransform = Instantiate(entryTemplate, container);
+        RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
+        entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformsList.Count());
+        entryTransform.gameObject.SetActive(true);
+        int rank = transformsList.Count() + 1;
+        entryTransform.Find("PosText").GetComponent<Text>().text = rank.ToString();
+        int score = highScoreEntry.score;
+        entryTransform.Find("NameText").GetComponent<Text>().text = score.ToString();
+        string name = highScoreEntry.name;
+        entryTransform.Find("ScoreText").GetComponent<Text>().text = name;
+        transformsList.Add(entryTransform);
     }
 
+    public void ShowMyRankingList()
+    {
+        StartCoroutine(sQLWebClient.GetMatchesByPlayerID(GameLoader.playerID));
+        show = true;
+    }
+
+    public void Update()
+    {
+        if (BackEndManager.Instance().IsMatchDataRecieved && show)
+        {
+            highScoreEntryList.Clear();
+            foreach (var matchData in BackEndManager.Instance().matchDatas)
+            {
+                HighScoreEntry entry = new HighScoreEntry();
+                entry.score = matchData.score;
+
+                StartCoroutine(sQLWebClient.GetPlayerByID(matchData.playerdata_idplayerdata));
+                if (BackEndManager.Instance().IsPlayerDataRecieved)
+                {
+                    entry.name = BackEndManager.Instance().playerData.username;
+                    highScoreEntryList.Add(entry);
+                }
+            }
+            show = false;
+            highScoreEntryTransformList = new List<Transform>();
+            foreach (HighScoreEntry highScoreEntry in highScoreEntryList)
+            {
+                CreateHighScoreEntryTransform(highScoreEntry, entryContainer, highScoreEntryTransformList);
+            }
+        }
+    }
     private class HighScoreEntry { public int score; public string name; }
 }

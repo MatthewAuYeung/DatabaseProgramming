@@ -81,6 +81,11 @@ public class LandingScreen : MonoBehaviour
         StartCoroutine(sQLWebClient.GetPlayerByUsername(username.text));
     }
 
+    public void Delete()
+    {
+        StartCoroutine(sQLWebClient.DeletePlayer(username.text));
+    }
+
     private void FixedUpdate()
     {
         if (BackEndManager.Instance().playerData.IsFound)

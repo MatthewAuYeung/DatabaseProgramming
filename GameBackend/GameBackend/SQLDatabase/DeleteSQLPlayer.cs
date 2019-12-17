@@ -10,7 +10,7 @@ namespace GameBackend.SQLDatabase
     {
         protected override void SQLCommands()
         {
-            string sql = string.Format("DELETE FROM playerdata WHERE username = {0}", playerData.username);
+            string sql = string.Format("DELETE FROM playerdata WHERE username = '{0}'", playerData.username);
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.ExecuteNonQuery();
         }

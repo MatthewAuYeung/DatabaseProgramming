@@ -1,12 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class MatchData
 {
-    public MatchData(int idmatchdata,int playerdata_idplayerdata,int score,string date_of_match)
+    public void InitializeMatch(int playerdata_idplayerdata,int score,string date_of_match)
     {
-        this.idmatchdata = idmatchdata;
         this.playerdata_idplayerdata = playerdata_idplayerdata;
         this.score = score;
         this.date_of_match = date_of_match;
