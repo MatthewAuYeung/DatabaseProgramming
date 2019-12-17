@@ -24,6 +24,8 @@ namespace GameBackend.SQLDatabase
                 playerData.email = rdr.GetString(3);
                 playerData.date_of_birth = rdr.GetString(4);
                 playerData.notification = rdr.GetBoolean(5);
+
+                playerData.IsFound = true;
             }
             rdr.Close();
         }

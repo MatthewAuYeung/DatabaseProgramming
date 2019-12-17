@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 public class UpadateProfileScript : MonoBehaviour
 {
+    private SQLWebClient sqlWebClient = new SQLWebClient();
     public InputField usernameInput;
     public InputField firstnameInput;
     public InputField lastnameInput;
@@ -10,14 +11,7 @@ public class UpadateProfileScript : MonoBehaviour
     public Toggle toggle;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        usernameInput = GetComponent<InputField>();
-        firstnameInput = GetComponent<InputField>();
-        lastnameInput = GetComponent<InputField>();
-        dobInput = GetComponent<InputField>();
-        emailInput = GetComponent<InputField>();
-    }
+
 
     public void CloseScreen()
     {
@@ -26,25 +20,27 @@ public class UpadateProfileScript : MonoBehaviour
 
     public void UpdatePlayer()
     {
-        PlayerData newplayer = new PlayerData(1,
-            usernameInput.ToString(),
-            firstnameInput.ToString(),
-            lastnameInput.ToString(),
-            emailInput.ToString(),
-            dobInput.ToString(),
+        PlayerData newplayer = new PlayerData();
+        newplayer.FillProfile(
+            usernameInput.text,
+            firstnameInput.text,
+            lastnameInput.text,
+            emailInput.text,
+            dobInput.text,
             toggle);
-        SQLWebClient.Instance().addPlayer(newplayer);           
+        StartCoroutine(sqlWebClient.UpdatePlayerProfile(newplayer));           
     }
 
     public void AddPlayer()
     {
-        PlayerData newplayer = new PlayerData(1,
-            usernameInput.ToString(),
-            firstnameInput.ToString(),
-            lastnameInput.ToString(),
-            emailInput.ToString(),
-            dobInput.ToString(),
+        PlayerData newplayer = new PlayerData();
+        newplayer.FillProfile(
+            usernameInput.text,
+            firstnameInput.text,
+            lastnameInput.text,
+            emailInput.text,
+            dobInput.text,
             toggle);
-        SQLWebClient.Instance().addPlayer(newplayer);
+        StartCoroutine(sqlWebClient.AddPlayer(newplayer));
     }
 }

@@ -76,7 +76,7 @@ public class SQLWebClient : WebClient
     {
         string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Delete";
 
-        UnityWebRequest webRequest = new UnityWebRequest(uri, "Delete");    
+        UnityWebRequest webRequest = new UnityWebRequest(uri, "Delete");
         webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         webRequest.SetRequestHeader("Content-Type", "application/json");
         yield return webRequest.SendWebRequest();
@@ -140,7 +140,7 @@ public class SQLWebClient : WebClient
     public override IEnumerator GetMatchesBetween(string from_date, string to_date)
     {
         BackEndManager.Instance().IsRecieved = false;
-        string uri = BackEndManager.Instance().SQL_MATCH_BASE_URL + "Get?date_of_match=" + from_date + to_date;
+        string uri = BackEndManager.Instance().SQL_MATCH_BASE_URL + "Get?date_of_match=" + from_date + "&date_of_match" + to_date;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
@@ -153,7 +153,7 @@ public class SQLWebClient : WebClient
             else
             {
                 Debug.Log(uri + " Received: " + webRequest.downloadHandler.text);
-                BackEndManager.Instance().matchData= JsonUtility.FromJson<MatchData>(webRequest.downloadHandler.text);
+                BackEndManager.Instance().matchDatas.Add(JsonUtility.FromJson<MatchData>(webRequest.downloadHandler.text));
                 BackEndManager.Instance().IsRecieved = true;
             }
         }
@@ -161,11 +161,9 @@ public class SQLWebClient : WebClient
 
     public override IEnumerable DeleteMatch(int player_id)
     {
-        string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Delete";
+        string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Delete" + player_id.ToString();
 
         UnityWebRequest webRequest = new UnityWebRequest(uri, "Delete");
-        webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-        webRequest.SetRequestHeader("Content-Type", "application/json");
         yield return webRequest.SendWebRequest();
 
         if (webRequest.isNetworkError)

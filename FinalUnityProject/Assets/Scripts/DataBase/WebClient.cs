@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class WebClient : MonoBehaviour
+public abstract class WebClient
 {
     public abstract IEnumerator GetPlayerByUsername(string username);
     public abstract IEnumerator GetPlayerByID(int id);

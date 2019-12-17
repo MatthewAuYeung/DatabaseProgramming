@@ -20,13 +20,16 @@ public class BackEndManager : MonoBehaviour
     public bool IsRecieved = false;
 
     public PlayerData playerData;
-    public MatchData matchData;
+    public List<MatchData> matchDatas;
     //--------------------------------------------------------------
     private void Awake()
     {
         if(instance == null)
         {
             instance = this;
+
+            playerData = new PlayerData();
+            matchDatas = new List<MatchData>();
         }
         else
         {

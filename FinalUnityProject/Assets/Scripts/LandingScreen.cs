@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 public class LandingScreen : MonoBehaviour
 {
+    SQLWebClient sQLWebClient = new SQLWebClient();
+    [SerializeField]
     public InputField username;
-
     [SerializeField]
     private Button startGameButton;
     [SerializeField]
@@ -20,11 +21,7 @@ public class LandingScreen : MonoBehaviour
     [SerializeField]
     private Button rankingListButton;
 
-    private bool _login = true;
-    private void Awake()
-    {
-        username = GetComponent<InputField>();
-    }
+    private bool _login = false;
 
     private void Start()
     {
@@ -68,7 +65,7 @@ public class LandingScreen : MonoBehaviour
 
     private void StartButtonClickdCallback()
     {
-        if(_login)
+        if (_login)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
         }
@@ -81,7 +78,18 @@ public class LandingScreen : MonoBehaviour
 
     public void Login()
     {
-        SQLWebClient.Instance().getPlayerByusername(username.ToString());
+        StartCoroutine(sQLWebClient.GetPlayerByUsername(username.text));
+    }
 
+    private void FixedUpdate()
+    {
+        if (BackEndManager.Instance().playerData.IsFound)
+        {
+            _login = true;
+        }
+        else
+        {
+            _login = false;
+        }
     }
 }

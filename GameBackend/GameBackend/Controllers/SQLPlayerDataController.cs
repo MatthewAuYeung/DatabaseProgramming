@@ -16,6 +16,7 @@ namespace GameBackend.Controllers
             GetSQLPlayerByUsername getSQLPlayer = new GetSQLPlayerByUsername();
             try
             {
+                getSQLPlayer.playerData = new PlayerData();
                 getSQLPlayer.playerData.username = username;
                 getSQLPlayer.execute();
             }
@@ -32,6 +33,7 @@ namespace GameBackend.Controllers
             GetSQLPlayerByID getSQLPlayer = new GetSQLPlayerByID();
             try
             {
+                getSQLPlayer.playerData = new PlayerData();
                 getSQLPlayer.playerData.idplayerdata = playerid;
                 getSQLPlayer.execute();
             }
@@ -48,6 +50,7 @@ namespace GameBackend.Controllers
             AddSQLPlayer addSQLPlayer = new AddSQLPlayer();
             try
             {
+                addSQLPlayer.playerData = new PlayerData();
                 addSQLPlayer.playerData = player;
                 addSQLPlayer.execute();
             }
@@ -64,6 +67,7 @@ namespace GameBackend.Controllers
             DeleteSQLPlayer deleteSQLPlayer = new DeleteSQLPlayer();
             try
             {
+                deleteSQLPlayer.playerData = new PlayerData();
                 deleteSQLPlayer.playerData.username = username;
                 deleteSQLPlayer.execute();                
             }
@@ -80,6 +84,7 @@ namespace GameBackend.Controllers
             UpdateSQLPlayer updateSQLPlayer = new UpdateSQLPlayer();
             try
             {
+                updateSQLPlayer.playerData = new PlayerData();
                 updateSQLPlayer.playerData.username = username;
                 updateSQLPlayer.execute();
             }
