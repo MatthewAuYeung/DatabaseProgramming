@@ -181,11 +181,12 @@ public class SQLWebClient : WebClient
         }
     }
 
-    public override IEnumerator DeleteMatch(int player_id)
+    public override IEnumerator DeleteMatch(int playerdata_idplayerdata)
     {
-        string uri = BackEndManager.Instance().SQL_PLAYER_BASE_URL + "Delete" + player_id.ToString();
+        string uri = BackEndManager.Instance().SQL_MATCH_BASE_URL + "Delete?playerid=" + playerdata_idplayerdata;
 
         UnityWebRequest webRequest = new UnityWebRequest(uri, "Delete");
+       // UnityWebRequest webRequest = UnityWebRequest.Delete(uri);
         yield return webRequest.SendWebRequest();
 
         if (webRequest.isNetworkError)
@@ -194,7 +195,8 @@ public class SQLWebClient : WebClient
         }
         else
         {
-            Debug.Log(uri + " Received: " + webRequest.downloadHandler.text);
+            //Debug.Log(uri + " Received: " + webRequest.downloadHandler.text);
+            Debug.Log("Deleted");
         }
     }
 
