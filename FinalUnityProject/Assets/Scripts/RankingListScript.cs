@@ -30,11 +30,8 @@ public class RankingListScript : MonoBehaviour
     {
         entryTemplate.gameObject.SetActive(false);
         highScoreEntryList = new List<HighScoreEntry>();
-        
-
+  
         show = false;
- 
-
         dateYearFromInput.text = "2017";
         dateMonthFromInput.text = "1";
         dateDayFromInput.text = "1";
@@ -50,6 +47,9 @@ public class RankingListScript : MonoBehaviour
 
     public void ShowRankingList()
     {
+        BackEndManager.Instance().matchDatas.Clear();
+        BackEndManager.Instance().playerDatas.Clear();
+
         int from_year = Int32.Parse(dateYearFromInput.text);
         int from_month = Int32.Parse(dateMonthFromInput.text);
         int from_day = Int32.Parse(dateDayFromInput.text);
@@ -63,27 +63,16 @@ public class RankingListScript : MonoBehaviour
         StartCoroutine(sQLWebClient.GetMatchesBetween(from.ToString("yyyy-MM-dd"), to.ToString("yyyy-MM-dd")));
         show = true;
         IsShowButtonPress = false;
-
-        if (BackEndManager.Instance().IsMatchDataRecieved)
-        {
-            highScoreEntryList.Clear();
-            foreach (var matchData in BackEndManager.Instance().matchDatas)
-            {
-                StartCoroutine(sQLWebClient.GetPlayerByID(matchData.playerdata_idplayerdata));
-            }
-        }
-
-
     }
-
     public void ShowMyRankingList()
     {
+        BackEndManager.Instance().matchDatas.Clear();
+        BackEndManager.Instance().playerDatas.Clear();
+
         StartCoroutine(sQLWebClient.GetMatchesByPlayerID(GameLoader.playerID));
         show = true;
         IsShowButtonPress = false;
-
     }
-
     public void Update()
     {
         if (BackEndManager.Instance().IsMatchDataRecieved)
@@ -98,6 +87,14 @@ public class RankingListScript : MonoBehaviour
 
         if (show && IsShowButtonPress)
         {
+            foreach (Transform trans in entryContainer)
+            {
+                if (trans.name == "highScoreTemplate(Clone)")
+                {
+                    Destroy(trans.gameObject);
+                }
+            }
+            
             highScoreEntryList = new List<HighScoreEntry>();
             highScoreEntryTransformList = new List<Transform>();
 
@@ -110,7 +107,6 @@ public class RankingListScript : MonoBehaviour
                 highScoreEntryList.Add(entry);
             }
 
-
             foreach (HighScoreEntry highScoreEntry in highScoreEntryList)
             {
                 CreateHighScoreEntryTransform(highScoreEntry, entryContainer, highScoreEntryTransformList);
@@ -118,11 +114,6 @@ public class RankingListScript : MonoBehaviour
             show = false;
             IsShowButtonPress = false;
         }
-    }
-
-    private void LateUpdate()
-    {
-        
     }
 
     public void Show()

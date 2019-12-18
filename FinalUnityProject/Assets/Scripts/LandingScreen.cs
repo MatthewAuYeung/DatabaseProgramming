@@ -84,6 +84,7 @@ public class LandingScreen : MonoBehaviour
     public void Delete()
     {
         StartCoroutine(sQLWebClient.DeletePlayer(username.text));
+        DeleteMatch();
     }
 
     private void FixedUpdate()
@@ -96,5 +97,10 @@ public class LandingScreen : MonoBehaviour
         {
             _login = false;
         }
+    }
+
+    public void DeleteMatch()
+    {
+        StartCoroutine(sQLWebClient.DeleteMatch(GameLoader.playerID));
     }
 }
