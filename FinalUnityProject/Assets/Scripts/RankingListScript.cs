@@ -22,7 +22,7 @@ public class RankingListScript : MonoBehaviour
     private List<Transform> highScoreEntryTransformList;
 
     private bool show;
- 
+    private bool IsShowButtonPress;
 
 
     // Start is called before the first frame update
@@ -30,7 +30,7 @@ public class RankingListScript : MonoBehaviour
     {
         entryTemplate.gameObject.SetActive(false);
         highScoreEntryList = new List<HighScoreEntry>();
-        highScoreEntryTransformList = new List<Transform>();
+        
 
         show = false;
  
@@ -62,53 +62,75 @@ public class RankingListScript : MonoBehaviour
 
         StartCoroutine(sQLWebClient.GetMatchesBetween(from.ToString("yyyy-MM-dd"), to.ToString("yyyy-MM-dd")));
         show = true;
+        IsShowButtonPress = false;
+
+        if (BackEndManager.Instance().IsMatchDataRecieved)
+        {
+            highScoreEntryList.Clear();
+            foreach (var matchData in BackEndManager.Instance().matchDatas)
+            {
+                StartCoroutine(sQLWebClient.GetPlayerByID(matchData.playerdata_idplayerdata));
+            }
+        }
+
+
     }
 
     public void ShowMyRankingList()
     {
         StartCoroutine(sQLWebClient.GetMatchesByPlayerID(GameLoader.playerID));
         show = true;
+        IsShowButtonPress = false;
+
     }
 
     public void Update()
     {
-        if (BackEndManager.Instance().IsMatchDataRecieved && show)
+        if (BackEndManager.Instance().IsMatchDataRecieved)
         {
             highScoreEntryList.Clear();
             foreach (var matchData in BackEndManager.Instance().matchDatas)
             {
-                //HighScoreEntry entry = new HighScoreEntry();
-                //entry.score = matchData.score;
-                
                 StartCoroutine(sQLWebClient.GetPlayerByID(matchData.playerdata_idplayerdata));
-                //if (BackEndManager.Instance().IsPlayerDataRecieved)
-                //{
-                //    entry.name = BackEndManager.Instance().playerData.username;
-                //    highScoreEntryList.Add(entry);
-                //}
+            }
+            BackEndManager.Instance().IsMatchDataRecieved = false;
+        }
+
+        if (show && IsShowButtonPress)
+        {
+            highScoreEntryList = new List<HighScoreEntry>();
+            highScoreEntryTransformList = new List<Transform>();
+
+            for (int i = 0; i < BackEndManager.Instance().matchDatas.Count(); i++)
+            {
+                HighScoreEntry entry = new HighScoreEntry();
+                entry.score = BackEndManager.Instance().matchDatas[i].score;
+                entry.name = BackEndManager.Instance().playerDatas[i].username;
+
+                highScoreEntryList.Add(entry);
+            }
+
+
+            foreach (HighScoreEntry highScoreEntry in highScoreEntryList)
+            {
+                CreateHighScoreEntryTransform(highScoreEntry, entryContainer, highScoreEntryTransformList);
             }
             show = false;
+            IsShowButtonPress = false;
         }
     }
 
+    private void LateUpdate()
+    {
+        
+    }
 
     public void Show()
     {
-        highScoreEntryList.Clear();
-        highScoreEntryTransformList.Clear();
-        for (int i = 0; i < BackEndManager.Instance().matchDatas.Count(); i++)
+        if(!IsShowButtonPress)
         {
-            HighScoreEntry entry = new HighScoreEntry();
-            entry.score = BackEndManager.Instance().matchDatas[i].score;
-            entry.name = BackEndManager.Instance().playerDatas[i].username;
-
-            highScoreEntryList.Add(entry);
-        }
-
-
-        foreach (HighScoreEntry highScoreEntry in highScoreEntryList)
-        {
-            CreateHighScoreEntryTransform(highScoreEntry, entryContainer, highScoreEntryTransformList);
+            show = true;
+            IsShowButtonPress = true;
         }
     }
 
